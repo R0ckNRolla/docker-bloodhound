@@ -1,0 +1,21 @@
+version: '3'
+services:
+    neo4j:
+        image: neo4j:4.0.6
+        ports:
+            - 7473:7473
+            - 7474:7474
+            - 7687:7687
+        environment:
+            - NEO4J_AUTH=neo4j/${PASSWORD}
+    bloodhound:
+        build:
+            context: .
+            args:
+                PASSWORD: ${PASSWORD}
+        volumes:
+            - /home/aku/Documents/tools/bloodhound/data:/data
+            - /tmp/.X11-unix:/tmp/.X11-unix
+        environment:
+            - DISPLAY=${DISPLAY}
+            - PASS=${PASSWORD}
