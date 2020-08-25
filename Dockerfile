@@ -23,16 +23,10 @@ RUN apt-get update -qq &&\
       libxss1 \
       libatk-bridge2.0-0 \
       libgtk-3-0 \
-      libgbm1 
-
-# Neo4j
-RUN wget -nv -O - https://debian.neo4j.com/neotechnology.gpg.key | apt-key add - &&\
-    echo 'deb https://debian.neo4j.com stable 4.1\n\
-deb https://debian.neo4j.com stable 4.0\n\
-deb https://debian.neo4j.com stable 3.5\n\
-deb https://debian.neo4j.com stable 3.4' > /etc/apt/sources.list.d/neo4j.list &&\
-    apt-get update -qq &&\
-    apt-get install -y -qq neo4j=1:$neo4j
+      libgbm1 \
+      libxtst6 \
+      libnss3 \
+      libnspr4
 
 # BloodHound
 RUN wget https://github.com/BloodHoundAD/BloodHound/releases/download/$bloodhound/BloodHound-linux-x64.zip -nv -P /tmp &&\
@@ -46,24 +40,26 @@ RUN wget https://github.com/BloodHoundAD/BloodHound/releases/download/$bloodhoun
 # BloodHound Config
 COPY config/*.json /root/.config/bloodhound/
 
+
 # BloodHound Test Data
-RUN if [ "$data" = "example" ]; then \
-    git clone https://github.com/adaptivethreat/BloodHound.git /tmp/BloodHound/ &&\
-    cp -r /tmp/BloodHound/BloodHoundExampleDB.graphdb /var/lib/neo4j/data/databases/ &&\
-    chown -R neo4j:neo4j /var/lib/neo4j/data/databases/BloodHoundExampleDB.graphdb/ &&\
-    echo "dbms.active_database=BloodHoundExampleDB.graphdb" >> /etc/neo4j/neo4j.conf &&\
-    echo "dbms.allow_upgrade=true" >> /etc/neo4j/neo4j.conf; fi
+#RUN if [ "$data" = "example" ]; then \
+#    git clone https://github.com/adaptivethreat/BloodHound.git /tmp/BloodHound/ &&\
+#    cp -r /tmp/BloodHound/BloodHoundExampleDB.graphdb /var/lib/neo4j/data/databases/ &&\
+#    chown -R neo4j:neo4j /var/lib/neo4j/data/databases/BloodHoundExampleDB.graphdb/ &&\
+#    echo "dbms.active_database=BloodHoundExampleDB.graphdb" >> /etc/neo4j/neo4j.conf &&\
+#    echo "dbms.allow_upgrade=true" >> /etc/neo4j/neo4j.conf; fi
 
 # Start
 RUN echo '#!/usr/bin/env bash\n\
-    service neo4j start\n\
     echo "Starting ..."\n\
+    sed -i -r "s#\"password\": \"[^\"]+\"#\"password\": \"${PASSWORD}\"#g" /root/.config/bloodhound/config.json \n\
     if [ ! -e /opt/.ready ]; then touch /opt/.ready\n\
     echo "First run takes some time"; sleep 5\n\
-    until $(curl -s -H "Content-Type: application/json" -X POST -d {\"password\":\"blood\"} --fail -u neo4j:neo4j http://127.0.0.1:7474/user/neo4j/password); do sleep 4; done; fi\n\
+    sleep 10 \n\
+    fi \n\
     cp -n /opt/BloodHound-linux-x64/Ingestors/SharpHound.* /data\n\
-    echo "\e[92m*** Log in with bolt://127.0.0.1:7687 (neo4j:blood) ***\e[0m"\n\
-    sleep 7; /opt/BloodHound-linux-x64/BloodHound --no-sandbox 2>/dev/null\n' > /opt/run.sh &&\
+    echo "\e[92m*** Log in with bolt://neo4j:7687 (neo4j:${PASSWORD}) ***\e[0m"\n\
+    sleep 7; /opt/BloodHound-linux-x64/BloodHound --no-sandbox \n' > /opt/run.sh &&\
     chmod +x /opt/run.sh
 
 

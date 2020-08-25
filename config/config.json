@@ -26,8 +26,8 @@
 		"GpLink": true
 	},
 	"databaseInfo": {
-		"url": "bolt://localhost:7687",
+		"url": "bolt://neo4j:7687",
 		"user": "neo4j",
-		"password": "blood"
+		"password": "PASSWORD"
 	}
 }
