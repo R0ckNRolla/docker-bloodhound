@@ -1,6 +1,5 @@
 FROM openjdk:11-jre
 MAINTAINER github.com/belane
-ARG data=none
 ARG neo4j=4.0.6
 ARG bloodhound=3.0.5
 
@@ -59,7 +58,7 @@ RUN echo '#!/usr/bin/env bash\n\
     fi \n\
     cp -n /opt/BloodHound-linux-x64/Ingestors/SharpHound.* /data\n\
     echo "\e[92m*** Log in with bolt://neo4j:7687 (neo4j:${PASSWORD}) ***\e[0m"\n\
-    sleep 7; /opt/BloodHound-linux-x64/BloodHound --no-sandbox \n' > /opt/run.sh &&\
+    sleep 7; /opt/BloodHound-linux-x64/BloodHound --no-sandbox --disable-dev-shm-usage \n' > /opt/run.sh &&\
     chmod +x /opt/run.sh
 
 
