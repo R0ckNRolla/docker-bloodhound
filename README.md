@@ -9,7 +9,8 @@ docker run -it \
   -v /tmp/.X11-unix:/tmp/.X11-unix \
   --device=/dev/dri:/dev/dri \
   -v $(pwd)/data:/data \
-  --name bloodhound belane/bloodhound
+  --name bloodhound rckl/bloodhound
+
 ```
 
 ## Build Image
