@@ -32,8 +32,8 @@ RUN wget https://github.com/BloodHoundAD/BloodHound/releases/download/$bloodhoun
     unzip -q /tmp/BloodHound-linux-x64.zip -d /opt/ &&\
     mkdir /opt/BloodHound-linux-x64/Ingestors && \
     mkdir /data && \
-    wget https://github.com/BloodHoundAD/BloodHound/raw/$bloodhound/Ingestors/SharpHound.ps1 -nv -P /opt/BloodHound-linux-x64/Ingestors && \
-    wget https://github.com/BloodHoundAD/BloodHound/raw/$bloodhound/Ingestors/SharpHound.exe -nv -P /opt/BloodHound-linux-x64/Ingestors && \
+    wget https://raw.githubusercontent.com/BloodHoundAD/BloodHound/master/Collectors/SharpHound.ps1 -nv -P /opt/BloodHound-linux-x64/Ingestors && \
+    wget https://github.com/BloodHoundAD/BloodHound/raw/master/Collectors/DebugBuilds/SharpHound.exe -nv -P /opt/BloodHound-linux-x64/Ingestors && \
     chmod +x /opt/BloodHound-linux-x64/BloodHound
 
 # BloodHound Config
