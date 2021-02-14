@@ -1,7 +1,7 @@
 FROM openjdk:11-jre
 MAINTAINER github.com/belane
-ARG neo4j=4.0.6
-ARG bloodhound=3.0.5
+ARG neo4j=4.2.3
+ARG bloodhound=4.0.1
 
 # Base packages
 RUN apt-get update -qq &&\
