@@ -28,6 +28,6 @@
 	"databaseInfo": {
 		"url": "bolt://0.0.0.0:7687",
 		"user": "neo4j",
-		"password": "neo4jj"
+		"password": "PASSWORD"
 	}
 }
